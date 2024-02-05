@@ -45,7 +45,11 @@ class ChitChatRemoteSourceImpl extends ChitChatRemoteSource {
       );
       return credential.user;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.code);
+      if (e.code == 'invalid-credential') {
+        return _createNewUser(email, password);
+      } else {
+        throw Exception(e.code);
+      }
     } catch (e) {
       throw Exception(e);
     }
@@ -124,5 +128,19 @@ class ChitChatRemoteSourceImpl extends ChitChatRemoteSource {
       'lastSender': chat.senderName,
       'lastSent': chat.messageSent,
     });
+  }
+
+  Future<User?> _createNewUser(String email, String password) async {
+    try {
+      final credential = await authentication.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
