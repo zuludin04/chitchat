@@ -5,5 +5,3 @@
 - SQLite -> Offline capabilities
 - GetX -> State Management
 - GetIt and Injectable -> Dependency Injection
-
-## Demo
